@@ -1,0 +1,13 @@
+target/
+data/
+*.log
+.env
+.env.*
+!.env.example
+*.pem
+.idea/
+.vscode/
+*.iml
+node_modules/
+out/
+infra/.out/
