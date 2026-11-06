@@ -1,0 +1,61 @@
+id,city,age,sold_online_before,bought_secondhand_before,main_platform,biggest_problem,interest_1to5,safety_concern_1to5,would_pay_to_boost,max_fee_rupees,items_to_sell
+1,Chennai,23,Yes,Yes,Instagram,Hard to find things nearby,4,4,Maybe,49,8
+2,Pune,18,No,No,None,Hard to find things nearby,4,5,Yes,99,8
+3,Hyderabad,23,No,Yes,OLX,Sharing my phone number,5,4,No,0,5
+4,Mumbai,21,Yes,Yes,Instagram,Low or no offers,5,5,No,0,6
+5,Chennai,22,Yes,No,Instagram,Low or no offers,4,3,No,0,10
+6,Delhi,18,Yes,Yes,None,Bargaining takes too long,3,4,Yes,29,10
+7,Bengaluru,22,No,Yes,WhatsApp groups,Sharing my phone number,3,4,Maybe,0,10
+8,Chennai,21,Yes,Yes,None,Low or no offers,2,4,No,0,4
+9,Hyderabad,21,No,Yes,OLX,Bargaining takes too long,5,3,No,0,4
+10,Pune,20,No,Yes,WhatsApp groups,Low or no offers,3,4,No,0,1
+11,Chennai,22,Yes,No,None,Bargaining takes too long,4,5,Yes,49,4
+12,Pune,22,No,Yes,OLX,Sharing my phone number,4,4,No,0,1
+13,Pune,21,Yes,Yes,OLX,Sharing my phone number,5,4,Maybe,29,8
+14,Chennai,23,No,No,None,Low or no offers,3,4,Yes,49,6
+15,Mumbai,19,No,No,None,Poor photos or details,4,2,Maybe,49,3
+16,Hyderabad,18,Yes,No,Instagram,Scams and fake listings,5,5,No,0,8
+17,Pune,23,Yes,Yes,Instagram,Scams and fake listings,5,5,Maybe,20,5
+18,Pune,23,Yes,Yes,WhatsApp groups,Bargaining takes too long,3,4,No,0,0
+19,Pune,23,Yes,No,OLX,Bargaining takes too long,3,2,Yes,49,2
+20,Pune,19,Yes,No,Instagram,Low or no offers,3,4,Yes,49,8
+21,Pune,23,No,No,None,Hard to find things nearby,4,4,Maybe,49,1
+22,Hyderabad,21,No,Yes,None,Hard to find things nearby,5,3,Maybe,20,5
+23,Bengaluru,24,Yes,No,Instagram,Low or no offers,5,5,Maybe,20,10
+24,Delhi,19,Yes,No,OLX,Sharing my phone number,3,4,Yes,49,1
+25,Pune,20,Yes,Yes,Facebook Marketplace,Low or no offers,4,5,Maybe,0,0
+26,Chennai,21,Yes,Yes,Instagram,Hard to find things nearby,5,5,No,0,0
+27,Delhi,23,No,Yes,OLX,Sharing my phone number,1,5,No,0,4
+28,Mumbai,19,Yes,No,Instagram,Low or no offers,4,3,Yes,79,6
+29,Pune,24,Yes,No,Instagram,Scams and fake listings,3,5,No,0,0
+30,Mumbai,21,Yes,Yes,WhatsApp groups,Scams and fake listings,4,4,Maybe,29,6
+31,Bengaluru,23,No,No,None,Low or no offers,4,4,No,0,4
+32,Pune,24,No,Yes,OLX,Scams and fake listings,3,4,No,0,2
+33,Delhi,21,Yes,No,None,Scams and fake listings,3,4,No,0,0
+34,Hyderabad,21,No,Yes,OLX,Sharing my phone number,4,5,Yes,79,5
+35,Bengaluru,22,No,Yes,Facebook Marketplace,Bargaining takes too long,3,4,Maybe,49,4
+36,Chennai,21,Yes,No,OLX,Hard to find things nearby,5,3,No,0,2
+37,Pune,20,Yes,Yes,WhatsApp groups,Hard to find things nearby,5,5,No,0,4
+38,Pune,23,Yes,No,Instagram,Scams and fake listings,5,4,No,0,2
+39,Pune,20,No,Yes,OLX,Low or no offers,5,4,No,0,4
+40,Bengaluru,21,Yes,No,OLX,Low or no offers,4,4,No,0,10
+41,Bengaluru,18,Yes,Yes,OLX,Hard to find things nearby,3,4,No,0,1
+42,Bengaluru,19,Yes,Yes,OLX,Low or no offers,3,4,No,0,4
+43,Delhi,22,No,Yes,Vinted-style app,Bargaining takes too long,4,5,No,0,5
+44,Pune,21,Yes,No,OLX,Low or no offers,3,4,No,0,10
+45,Bengaluru,21,Yes,No,WhatsApp groups,Hard to find things nearby,4,3,Yes,99,5
+46,Pune,20,Yes,No,Instagram,Low or no offers,5,5,No,0,1
+47,Bengaluru,19,Yes,No,Instagram,Low or no offers,4,5,Maybe,20,8
+48,Hyderabad,23,No,Yes,Instagram,Poor photos or details,3,5,Yes,99,6
+49,Pune,24,Yes,Yes,None,Sharing my phone number,4,4,Maybe,29,6
+50,Pune,19,No,No,None,Sharing my phone number,4,3,Yes,99,4
+51,Bengaluru,18,Yes,No,WhatsApp groups,Bargaining takes too long,2,4,Maybe,20,2
+52,Delhi,24,Yes,Yes,Instagram,Poor photos or details,3,4,Maybe,49,1
+53,Delhi,21,Yes,No,OLX,Low or no offers,3,4,Maybe,49,5
+54,Bengaluru,21,Yes,Yes,Vinted-style app,Scams and fake listings,4,4,Maybe,0,8
+55,Chennai,23,Yes,Yes,Facebook Marketplace,Sharing my phone number,3,4,Yes,49,4
+56,Mumbai,21,No,No,None,Low or no offers,5,2,Maybe,49,1
+57,Chennai,23,No,No,None,Hard to find things nearby,4,5,No,0,1
+58,Bengaluru,20,No,No,None,Hard to find things nearby,4,4,Maybe,20,8
+59,Pune,23,Yes,No,Facebook Marketplace,Sharing my phone number,3,5,Maybe,20,2
+60,Pune,20,No,Yes,Facebook Marketplace,Bargaining takes too long,4,4,No,0,2
