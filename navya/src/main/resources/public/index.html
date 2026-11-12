@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navya – buy & sell pre-loved stuff</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a href="#/" class="logo">Navya</a>
+    <button id="searchBtn" type="button" class="search-btn" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+    <button id="menuBtn" class="menu-btn" aria-label="Menu"><span></span><span></span></button>
+    <nav id="nav" class="nav">
+      <a href="#/" class="nav-link">Home</a>
+      <a href="#/mine" class="nav-link" data-auth="in">My listings</a>
+      <a href="#/chats" class="nav-link" data-auth="in">Chats</a>
+      <a href="#/orders" class="nav-link" data-auth="in">Orders</a>
+      <a href="#/admin" class="nav-link" data-auth="admin">Reports</a>
+      <a href="#/login" class="nav-link" data-auth="out">Log in</a>
+      <a href="#/" class="nav-link" data-logout data-auth="in">Log out</a>
+      <a href="#/post" class="btn nav-sell">Sell</a>
+    </nav>
+    <div id="searchPanel" class="search-panel">
+      <svg class="field-ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" form="filters" name="q" type="search" class="header-search" placeholder="Search clothes, shoes, bags…" aria-label="Search" autocomplete="off">
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- HOME -->
+  <section id="view-home" class="view">
+    <form id="filters" autocomplete="off">
+      <div id="chips" class="chips"></div>
+
+      <div id="filterPanel" class="filter-panel" hidden>
+        <label>City <input name="city" placeholder="Any city"></label>
+        <label>Min price (₹) <input name="min" type="number" min="0" placeholder="0"></label>
+        <label>Max price (₹) <input name="max" type="number" min="0" placeholder="Any"></label>
+        <label class="check"><input type="checkbox" name="favs"> Saved only</label>
+        <button type="button" class="link-btn" data-clear>Clear</button>
+      </div>
+
+      <div class="results-bar">
+        <p id="count" class="muted"></p>
+        <div class="results-tools">
+          <button type="button" id="filterBtn" class="link-btn" data-filterbtn>Filters</button>
+          <label class="sort">Sort
+            <select name="sort">
+              <option value="new">Newest</option>
+              <option value="low">Price: low to high</option>
+              <option value="high">Price: high to low</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    </form>
+
+    <div id="grid" class="grid"></div>
+    <p class="more"><button type="button" id="more" class="btn ghost" hidden>Show more</button></p>
+    <div id="empty" class="empty" hidden>
+      <h3>Nothing found</h3>
+      <p>Try a different search or clear your filters.</p>
+      <button type="button" class="btn ghost" data-clear>Clear filters</button>
+    </div>
+  </section>
+
+  <!-- LISTING DETAIL -->
+  <section id="view-listing" class="view" hidden>
+    <div id="detail"></div>
+  </section>
+
+  <!-- LOGIN -->
+  <section id="view-login" class="view" hidden>
+    <form id="loginForm" class="auth-card">
+      <div class="auth-head">
+        <h2>Log in</h2>
+        <p class="muted">Log in to sell, save items and chat with sellers.</p>
+      </div>
+      <label>Email <input name="email" type="email" placeholder="you@example.com" required></label>
+      <label>Password <input name="password" type="password" placeholder="Your password" maxlength="64" required></label>
+      <p class="err" id="loginErr"></p>
+      <button class="btn block">Log in</button>
+      <p class="switch">New to Navya? <a href="#/signup">Create an account</a></p>
+    </form>
+  </section>
+
+  <!-- SIGN UP -->
+  <section id="view-signup" class="view" hidden>
+    <form id="signupForm" class="auth-card">
+      <div class="auth-head">
+        <h2>Create your account</h2>
+        <p class="muted">It takes less than a minute.</p>
+      </div>
+      <label>Name <input name="name" placeholder="Your name" required></label>
+      <label>Email <input name="email" type="email" placeholder="you@example.com" required></label>
+      <label>City <input name="city" placeholder="Where are you based?" required></label>
+      <label>Password <input name="password" type="password" placeholder="8 to 64 characters" minlength="8" maxlength="64" required></label>
+      <label class="consent"><input type="checkbox" name="consent" required> <span>I am 18 or older. I accept the <a href="/terms.html" target="_blank" rel="noopener">Terms of Use</a> and have read the <a href="/privacy.html" target="_blank" rel="noopener">Privacy Notice</a>.</span></label>
+      <p class="err" id="signupErr"></p>
+      <button class="btn block">Sign up</button>
+      <p class="switch">Already have an account? <a href="#/login">Log in</a></p>
+    </form>
+  </section>
+
+  <!-- POST / EDIT ITEM -->
+  <section id="view-post" class="view" hidden>
+    <form id="postForm" class="panel">
+      <div>
+        <h2 id="postTitle">Sell an item</h2>
+        <p class="muted">Add a few details and photos. Buyers will message you directly.</p>
+      </div>
+      <input type="hidden" name="listingId">
+      <label>Title <input name="title" maxlength="80" placeholder="e.g. Denim jacket" required></label>
+      <div class="row2">
+        <label>Price (₹) <input name="price" type="number" min="0" placeholder="500" required></label>
+        <label>Category <select name="category" required><option value="" disabled selected>Choose…</option></select></label>
+      </div>
+      <div class="row2">
+        <label>Condition <select name="condition" required></select></label>
+        <label>Size <input name="size" placeholder="e.g. M, UK 8 (optional)"></label>
+      </div>
+      <label>City <input name="city" placeholder="Where can buyers meet you?" required></label>
+      <label>Description <textarea name="description" rows="4" placeholder="Brand, fit, any flaws, why you're selling…" required></textarea></label>
+      <div>
+        <span class="lbl">Photos</span>
+        <div id="preview" class="preview"></div>
+        <label class="upload">Add photos (up to 4)<input id="photos" type="file" accept="image/*" multiple></label>
+      </div>
+      <button class="btn block">Publish listing</button>
+    </form>
+  </section>
+
+  <!-- MY LISTINGS -->
+  <section id="view-mine" class="view" hidden>
+    <h2>My listings</h2>
+    <div id="mineList"></div>
+    <div id="noMine" class="empty" hidden>
+      <h3>Nothing listed yet</h3>
+      <p>Got something you no longer use? Give it a new home.</p>
+      <a class="btn" href="#/post">Sell your first item</a>
+    </div>
+  </section>
+
+  <!-- BOOST (pay to pin a listing) -->
+  <section id="view-boost" class="view" hidden>
+    <form id="boostForm" class="panel">
+      <div>
+        <h2>Boost your listing</h2>
+        <p class="muted" id="boostInfo"></p>
+      </div>
+      <label>Payment (test mode, no real money)
+        <select name="token">
+          <option value="tok_success">Test card: approve</option>
+          <option value="tok_declined">Test card: decline</option>
+          <option value="tok_timeout">Test card: slow bank (approves after a few seconds)</option>
+        </select>
+      </label>
+      <p class="err" id="boostErr"></p>
+      <button class="btn block" id="boostPay">Pay</button>
+    </form>
+  </section>
+
+  <!-- ORDERS -->
+  <section id="view-orders" class="view" hidden>
+    <h2>Orders</h2>
+    <div id="orderList"></div>
+    <div id="noOrders" class="empty" hidden>
+      <h3>No orders yet</h3>
+      <p>A boost pins your listing at the top of the home page for a few days.</p>
+    </div>
+  </section>
+
+  <!-- ADMIN: reports -->
+  <section id="view-admin" class="view" hidden>
+    <h2>Reported listings</h2>
+    <div id="reportList"></div>
+    <div id="noReports" class="empty" hidden><h3>No open reports</h3></div>
+    <div class="btns admin-tools">
+      <button type="button" class="btn ghost small" data-export="csv">Download CSV</button>
+      <button type="button" class="btn ghost small" data-export="save">Save export to storage</button>
+    </div>
+    <pre id="adminStats" class="stats"></pre>
+  </section>
+
+  <!-- CHAT INBOX -->
+  <section id="view-chats" class="view" hidden>
+    <h2>Chats</h2>
+    <div id="chatList"></div>
+    <div id="noChats" class="empty" hidden>
+      <h3>No chats yet</h3>
+      <p>Open a listing and tap "Chat with seller" to start a conversation.</p>
+    </div>
+  </section>
+
+  <!-- CHAT SCREEN -->
+  <section id="view-chat" class="view" hidden>
+    <div class="chat">
+      <div id="chatHead" class="chat-head"></div>
+      <div id="msgs" class="msgs"></div>
+      <form id="chatForm" class="chat-form">
+        <input name="text" placeholder="Type a message…" autocomplete="off" required>
+        <button class="btn">Send</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- SELLER PROFILE -->
+  <section id="view-seller" class="view" hidden>
+    <div id="sellerBox"></div>
+    <div id="sellerGrid" class="grid"></div>
+  </section>
+
+  <!-- Safety note: only shown on listing and chat pages -->
+  <p id="safety" class="safety" hidden>Stay safe: meet in a public place, check the item before paying and never pay in advance. Navya only connects buyers and sellers; payment and delivery are between you.</p>
+
+</main>
+
+<footer class="site-footer">
+  <p class="muted">© Navya &middot; <a href="/terms.html">Terms of Use</a> &middot; <a href="/privacy.html">Privacy Notice</a> &middot; <a href="/grievance.html">Grievance Officer</a></p>
+</footer>
+
+<div id="toast" class="toast" hidden></div>
+<script src="script.js"></script>
+</body>
+</html>
