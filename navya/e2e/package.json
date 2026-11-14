@@ -1,0 +1,8 @@
+{
+  "name": "navya-e2e",
+  "private": true,
+  "type": "module",
+  "description": "Browser smoke test that drives the real UI",
+  "scripts": { "test": "node ui-smoke.mjs" },
+  "devDependencies": { "puppeteer-core": "^24.0.0" }
+}
