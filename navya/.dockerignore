@@ -1,0 +1,12 @@
+target/
+data/
+.git/
+.github/
+e2e/
+load/
+infra/
+docs/
+**/node_modules/
+*.log
+.env
+.env.*

@@ -1,0 +1,9 @@
+# Same size as the cloud container (0.5 vCPU would be ideal, one pinned core is what a laptop can enforce reliably) and 1 GiB.
+# The limits must exist when the container STARTS: the JVM sizes its heap from them at start-up.
+#   docker compose -f docker-compose.yml -f docker-compose.limits.yml up -d --force-recreate app
+services:
+  app:
+    mem_limit: 1g
+    memswap_limit: 1g
+    cpuset: "0"
+    cpus: 1
