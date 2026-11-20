@@ -1,0 +1,27 @@
+# k6 browse test, 100 users, no think time, 5,008 listings. App limited to 0.5 CPU and 1 GiB (systemd CPUQuota=50%, MemoryMax=1G), the size of the planned Fargate task. PostgreSQL and k6 run on the same laptop, so this overstates what a cloud network allows.
+Tue Nov 24 07:15:02 PM UTC 2026
+  █ THRESHOLDS 
+    http_req_duration
+    ✓ 'p(95)<500' p(95)=135.76ms
+    http_req_failed
+    ✓ 'rate<0.01' rate=0.00%
+  █ TOTAL RESULTS 
+    checks_total.......: 86327   1078.951829/s
+    checks_succeeded...: 100.00% 86327 out of 86327
+    checks_failed......: 0.00%   0 out of 86327
+    ✓ list is 200
+    ✓ detail is 200
+    ✓ photo is 200
+    HTTP
+    http_req_duration..............: avg=51.95ms  min=120.92µs med=41.79ms max=537.03ms p(90)=108.56ms p(95)=135.76ms
+      { expected_response:true }...: avg=51.95ms  min=120.92µs med=41.79ms max=537.03ms p(90)=108.56ms p(95)=135.76ms
+    http_req_failed................: 0.00%  0 out of 86327
+    http_reqs......................: 86327  1078.951829/s
+    EXECUTION
+    iteration_duration.............: avg=107.05ms min=1.89ms   med=94.46ms max=653.8ms  p(90)=203.48ms p(95)=241.36ms
+    iterations.....................: 41984  524.734018/s
+    vus............................: 1      min=1          max=99 
+    vus_max........................: 100    min=100        max=100
+    NETWORK
+    data_received..................: 455 MB 5.7 MB/s
+    data_sent......................: 9.5 MB 118 kB/s

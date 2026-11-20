@@ -1,0 +1,27 @@
+# k6 browse test, 200 users with 1 s think time. App pinned to one CPU core (taskset -c 0), -Xmx600m, PostgreSQL on the same laptop.
+Tue Nov 24 07:03:18 PM UTC 2026
+  █ THRESHOLDS 
+    http_req_duration
+    ✓ 'p(95)<500' p(95)=650.59µs
+    http_req_failed
+    ✓ 'rate<0.01' rate=0.00%
+  █ TOTAL RESULTS 
+    checks_total.......: 22485   279.153445/s
+    checks_succeeded...: 100.00% 22485 out of 22485
+    checks_failed......: 0.00%   0 out of 22485
+    ✓ list is 200
+    ✓ detail is 200
+    ✓ photo is 200
+    HTTP
+    http_req_duration..............: avg=326.03µs min=61.85µs med=268.75µs max=7.74ms p(90)=570.91µs p(95)=650.59µs
+      { expected_response:true }...: avg=326.03µs min=61.85µs med=268.75µs max=7.74ms p(90)=570.91µs p(95)=650.59µs
+    http_req_failed................: 0.00%  0 out of 22485
+    http_reqs......................: 22485  279.153445/s
+    EXECUTION
+    iteration_duration.............: avg=1s       min=1s      med=1s       max=1.01s  p(90)=1s       p(95)=1s      
+    iterations.....................: 7581   94.118847/s
+    vus............................: 5      min=3          max=199
+    vus_max........................: 200    min=200        max=200
+    NETWORK
+    data_received..................: 62 MB  770 kB/s
+    data_sent......................: 2.7 MB 34 kB/s

@@ -1,0 +1,41 @@
+# k6 browse test against the LIVE DEMO on AWS (Lightsail micro_3_2 VM, managed PostgreSQL, S3 photos, Sydney), 50 peak users, 1 s think time. k6 ran on the development machine, so every request includes a round trip of about 0.39 s to Sydney.
+Wed Nov 25 10:24:04 UTC 2026
+
+  █ THRESHOLDS 
+
+    http_req_duration
+    ✓ 'p(95)<500' p(95)=422.35ms
+
+    http_req_failed
+    ✓ 'rate<0.01' rate=0.00%
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 2928    36.33759/s
+    checks_succeeded...: 100.00% 2928 out of 2928
+    checks_failed......: 0.00%   0 out of 2928
+
+    ✓ list is 200
+    ✓ detail is 200
+    ✓ photo is 200
+
+    HTTP
+    http_req_duration..............: avg=398.54ms min=376.4ms med=392.9ms max=474.88ms p(90)=418.64ms p(95)=422.35ms
+      { expected_response:true }...: avg=398.54ms min=376.4ms med=392.9ms max=474.88ms p(90)=418.64ms p(95)=422.35ms
+    http_req_failed................: 0.00%  0 out of 2928
+    http_reqs......................: 2928   36.33759/s
+
+    EXECUTION
+    iteration_duration.............: avg=2.23s    min=2.15s   med=2.19s   max=3.2s     p(90)=2.21s    p(95)=2.92s   
+    iterations.....................: 976    12.11253/s
+    vus............................: 1      min=1         max=50
+    vus_max........................: 50     min=50        max=50
+
+    NETWORK
+    data_received..................: 7.4 MB 92 kB/s
+    data_sent......................: 286 kB 3.5 kB/s
+
+
+
+

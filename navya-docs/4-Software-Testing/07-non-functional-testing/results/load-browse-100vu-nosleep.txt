@@ -1,0 +1,27 @@
+# k6 browse test, 100 users, no think time (finds the limit of one instance). Same setup.
+Tue Nov 24 07:04:39 PM UTC 2026
+  █ THRESHOLDS 
+    http_req_duration
+    ✓ 'p(95)<500' p(95)=8.61ms
+    http_req_failed
+    ✓ 'rate<0.01' rate=0.00%
+  █ TOTAL RESULTS 
+    checks_total.......: 966140  12076.67767/s
+    checks_succeeded...: 100.00% 966140 out of 966140
+    checks_failed......: 0.00%   0 out of 966140
+    ✓ list is 200
+    ✓ detail is 200
+    ✓ photo is 200
+    HTTP
+    http_req_duration..............: avg=4.6ms  min=59.12µs med=1.38ms max=1.37s p(90)=4.14ms p(95)=8.61ms 
+      { expected_response:true }...: avg=4.6ms  min=59.12µs med=1.38ms max=1.37s p(90)=4.14ms p(95)=8.61ms 
+    http_req_failed................: 0.00%  0 out of 966140
+    http_reqs......................: 966140 12076.67767/s
+    EXECUTION
+    iteration_duration.............: avg=13.8ms min=513.8µs med=4.76ms max=1.37s p(90)=21ms   p(95)=52.62ms
+    iterations.....................: 325651 4070.61312/s
+    vus............................: 1      min=1           max=99 
+    vus_max........................: 100    min=100         max=100
+    NETWORK
+    data_received..................: 2.7 GB 33 MB/s
+    data_sent......................: 118 MB 1.5 MB/s

@@ -1,0 +1,25 @@
+{
+  "simulated": true,
+  "note": "Members and choices are random (seed 20261125). The server and its answers are real.",
+  "members": 40,
+  "listings": 46,
+  "chatsStarted": 29,
+  "messages": 49,
+  "markedSold": 7,
+  "boostsPaid": 3,
+  "boostsDeclined": 1,
+  "boostsPending": 0,
+  "reports": 4,
+  "errors": 0,
+  "statusCounts": {
+    "200": 159,
+    "201": 139,
+    "402": 1,
+    "409": 9
+  },
+  "availableListingsVisible": 54,
+  "orderStatusAfterSettling": {
+    "paid": 3,
+    "failed": 1
+  }
+}

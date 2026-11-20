@@ -1,0 +1,31 @@
+# k6 chat test, 30 users on one chat, per-member limit 30 messages/min (429 is expected and counted).
+Tue Nov 24 07:10:17 PM UTC 2026
+  █ THRESHOLDS 
+    http_req_duration{kind:chat}
+    ✓ 'p(95)<500' p(95)=3.58ms
+    http_req_failed
+    ✓ 'rate<0.01' rate=0.00%
+  █ TOTAL RESULTS 
+    checks_total.......: 3718    61.547832/s
+    checks_succeeded...: 100.00% 3718 out of 3718
+    checks_failed......: 0.00%   0 out of 3718
+    ✓ sent
+    ✓ read is 200
+    ✓ inbox is 200
+    CUSTOM
+    messages_rate_limited..........: 1682   27.843855/s
+    messages_sent..................: 118    1.953374/s
+    HTTP
+    http_req_duration..............: avg=1.21ms min=77.39µs med=685.63µs max=50.44ms p(90)=2.45ms p(95)=3.61ms
+      { expected_response:true }...: avg=1.21ms min=77.39µs med=685.63µs max=50.44ms p(90)=2.45ms p(95)=3.61ms
+      { kind:chat }................: avg=1.18ms min=77.39µs med=684.99µs max=33.33ms p(90)=2.43ms p(95)=3.58ms
+    http_req_failed................: 0.00%  0 out of 5405
+    http_reqs......................: 5405   89.474457/s
+    EXECUTION
+    iteration_duration.............: avg=1s     min=1s      med=1s       max=1.03s   p(90)=1s     p(95)=1.01s 
+    iterations.....................: 1800   29.797229/s
+    vus............................: 30     min=30        max=30
+    vus_max........................: 30     min=30        max=30
+    NETWORK
+    data_received..................: 25 MB  419 kB/s
+    data_sent......................: 2.3 MB 38 kB/s

@@ -1,0 +1,27 @@
+# k6 browse test, 100 users, no think time, with 5,008 listings in the database. App pinned to one core, -Xmx600m, PostgreSQL on the same laptop.
+Tue Nov 24 07:08:51 PM UTC 2026
+  █ THRESHOLDS 
+    http_req_duration
+    ✓ 'p(95)<500' p(95)=160.12ms
+    http_req_failed
+    ✓ 'rate<0.01' rate=0.00%
+  █ TOTAL RESULTS 
+    checks_total.......: 87448   1092.992669/s
+    checks_succeeded...: 100.00% 87448 out of 87448
+    checks_failed......: 0.00%   0 out of 87448
+    ✓ list is 200
+    ✓ detail is 200
+    ✓ photo is 200
+    HTTP
+    http_req_duration..............: avg=51.35ms  min=104.62µs med=29.86ms max=3.33s p(90)=88.12ms  p(95)=160.12ms
+      { expected_response:true }...: avg=51.35ms  min=104.62µs med=29.86ms max=3.33s p(90)=88.12ms  p(95)=160.12ms
+    http_req_failed................: 0.00%  0 out of 87448
+    http_reqs......................: 87448  1092.992669/s
+    EXECUTION
+    iteration_duration.............: avg=105.77ms min=1.83ms   med=65.42ms max=3.35s p(90)=187.48ms p(95)=335.85ms
+    iterations.....................: 42547  531.785279/s
+    vus............................: 1      min=1          max=99 
+    vus_max........................: 100    min=100        max=100
+    NETWORK
+    data_received..................: 461 MB 5.8 MB/s
+    data_sent......................: 9.6 MB 120 kB/s
