@@ -1,0 +1,116 @@
+name: Deploy
+
+# Runs after every merge to main. Tests, builds the image, pushes it to Amazon ECR, rolls it out on ECS,
+# runs the smoke test against the live URL, and puts the previous task definition back if that fails.
+#
+# One-time set-up (see infra/README.md):
+#   repository variables: AWS_DEPLOY_ROLE_ARN (printed by infra/oidc.sh), AWS_REGION (default ap-southeast-2), NAVYA_ENV (default demo)
+# Sign-in uses OpenID Connect: there is no stored AWS key in GitHub. The role only trusts this repository's main branch.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: navya   # the project is in navya/, next to navya-docs/
+
+permissions:
+  contents: read
+  id-token: write   # lets the job ask GitHub for a short-lived identity token for AWS
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION || 'ap-southeast-2' }}
+  NAVYA_ENV: ${{ vars.NAVYA_ENV || 'demo' }}
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+          cache-dependency-path: navya/pom.xml
+      - run: ./mvnw -B verify
+
+  deploy:
+    name: Build, push and deploy
+    needs: test
+    runs-on: ubuntu-latest
+    if: ${{ vars.AWS_DEPLOY_ROLE_ARN != '' }}   # skipped until the AWS role variable is set
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push the image (tag = commit)
+        id: image
+        env:
+          REGISTRY: ${{ steps.ecr.outputs.registry }}
+        run: |
+          IMAGE="$REGISTRY/navya-$NAVYA_ENV:${GITHUB_SHA::12}"
+          docker build -t "$IMAGE" .
+          docker push "$IMAGE"
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Remember the running task definition
+        id: previous
+        run: |
+          ARN=$(aws ecs describe-services --cluster "navya-$NAVYA_ENV" --services "navya-$NAVYA_ENV" --query 'services[0].taskDefinition' --output text)
+          echo "arn=$ARN" >> "$GITHUB_OUTPUT"
+          aws ecs describe-task-definition --task-definition "$ARN" --query taskDefinition > task-def.json
+
+      - name: Put the new image in a task definition
+        id: render
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: navya/task-def.json
+          container-name: app
+          image: ${{ steps.image.outputs.image }}
+
+      - name: Roll out and wait until the service is stable
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render.outputs.task-definition }}
+          service: navya-${{ env.NAVYA_ENV }}
+          cluster: navya-${{ env.NAVYA_ENV }}
+          wait-for-service-stability: true
+
+      - name: Find the public URL
+        id: url
+        run: |
+          # the app is behind CloudFront. The distribution's domain is in the stack outputs
+          echo "url=$(aws cloudformation describe-stacks --stack-name "navya-$NAVYA_ENV" --query "Stacks[0].Outputs[?OutputKey=='Url'].OutputValue" --output text)" >> "$GITHUB_OUTPUT"
+
+      - name: Smoke test the live URL
+        id: smoke
+        env:
+          BASE_URL: ${{ steps.url.outputs.url }}
+        run: node load/smoke.mjs
+
+      - name: Roll back if the smoke test failed
+        if: ${{ failure() && steps.smoke.outcome == 'failure' }}
+        env:
+          PREVIOUS: ${{ steps.previous.outputs.arn }}
+        run: |
+          echo "Smoke test failed, restoring $PREVIOUS"
+          aws ecs update-service --cluster "navya-$NAVYA_ENV" --service "navya-$NAVYA_ENV" --task-definition "$PREVIOUS" > /dev/null
+          aws ecs wait services-stable --cluster "navya-$NAVYA_ENV" --services "navya-$NAVYA_ENV"

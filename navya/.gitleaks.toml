@@ -1,0 +1,9 @@
+# Settings for the gitleaks scan in CI.
+title = "navya"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "docker-compose.yml uses the default MinIO login (minioadmin) for a local-only storage emulator. It is not a secret."
+regexes = ['''minioadmin''']

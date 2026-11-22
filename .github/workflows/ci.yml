@@ -1,0 +1,134 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+# the project is in navya/, next to navya-docs/
+defaults:
+  run:
+    working-directory: navya
+
+jobs:
+  test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    services:
+      minio:
+        # S3 look-alike for S3StorageTest. The login is MinIO's local default, not a secret.
+        image: bitnami/minio:latest
+        env:
+          MINIO_ROOT_USER: minioadmin
+          MINIO_ROOT_PASSWORD: minioadmin
+        ports: ["9000:9000"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+          cache-dependency-path: navya/pom.xml
+      - name: Build, unit tests, integration tests, coverage
+        env:
+          S3_TEST_ENDPOINT: http://localhost:9000
+          AWS_ACCESS_KEY_ID: minioadmin
+          AWS_SECRET_ACCESS_KEY: minioadmin
+          AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+          AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+        run: ./mvnw -B verify
+      - name: Upload test and coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            navya/target/surefire-reports
+            navya/target/site/jacoco
+      - name: Upload jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: navya-jar
+          path: navya/target/navya.jar
+
+  browser:
+    name: Browser test
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+          cache-dependency-path: navya/pom.xml
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: ./mvnw -B -DskipTests package test-compile
+      - name: Drive the UI in Chrome
+        env:
+          CHROME: /usr/bin/google-chrome
+          SHOTS: shots
+        run: e2e/run.sh
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-screenshots
+          path: navya/e2e/shots
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # scan the whole history, not only the last commit
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: navya/.gitleaks.toml
+
+  templates:
+    name: Lint infrastructure and workflows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install cfn-lint && cfn-lint infra/*.yaml
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: navya/Dockerfile
+
+  image:
+    name: Build container image
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: navya
+          push: false
+          load: true
+          tags: navya:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Scan the image for known vulnerabilities (OS packages and bundled jars)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: navya:ci
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          trivyignores: navya/.trivyignore
+          exit-code: "1"

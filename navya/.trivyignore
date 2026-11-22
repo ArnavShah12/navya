@@ -1,0 +1,7 @@
+# Accepted vulnerabilities, each with a reason and a date to look at it again.
+# Both are in Jetty 11.0.25, brought in by Javalin 6.7. Jetty 11 is end-of-life: the fixed versions (11.0.29, 11.0.31)
+# are not on Maven Central (it stops at 11.0.26), so the version cannot be pinned. The fix is moving to Javalin 7 (Jetty 12).
+# Exposure here: the app sits behind the cloud platform's HTTPS ingress, which terminates and re-frames requests.
+# Review again: before Review 2, and when moving to Javalin 7. Inherited from the FestPass project (same Javalin version). Re-scanned on 2026-11-25 with trivy 0.76.2 and no ignore file: both findings are still reported, and a pin to Jetty 11.0.31 fails because that release is not on Maven Central.
+CVE-2026-2332
+CVE-2026-10050

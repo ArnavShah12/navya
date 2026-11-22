@@ -1,0 +1,29 @@
+# Demo stack for one small VM: Caddy (HTTPS) and the app. The database is a Lightsail managed PostgreSQL (infra/lightsail-demo.sh db). Photos go to S3 once `infra/lightsail-demo.sh s3` has run,
+# until then to a local volume. Used by infra/lightsail-demo.sh. Needs DB_HOST, DB_PASSWORD, JWT_SECRET, SEED_PASSWORD, DOMAIN in .env on the VM.
+services:
+  caddy:   # gets and renews a Let's Encrypt certificate for DOMAIN, redirects HTTP to HTTPS, passes WebSockets
+    image: caddy:2
+    restart: unless-stopped
+    depends_on: [app]
+    ports: ["80:80", "443:443"]
+    command: caddy reverse-proxy --from ${DOMAIN:?set DOMAIN} --to app:8080
+    volumes: [caddydata:/data]
+  app:
+    build: .
+    restart: unless-stopped
+    volumes: [appdata:/data]
+    environment:
+      DB_URL: jdbc:postgresql://${DB_HOST:?set DB_HOST}:${DB_PORT:-5432}/navya?sslmode=require
+      DB_USER: navya
+      DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET}
+      STORAGE: ${STORAGE:-local}
+      S3_BUCKET: ${S3_BUCKET:-}
+      S3_REGION: ${S3_REGION:-ap-southeast-2}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      SEED: "true"
+      SEED_PASSWORD: ${SEED_PASSWORD:?set SEED_PASSWORD}
+volumes:
+  appdata:
+  caddydata:
